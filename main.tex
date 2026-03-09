@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\begin{document}
+
+In this study, the transient gas flow equation for the microporous media is solved using a \textbf{parameter-explicit lagging} technique coupled with a \textbf{semi-implicit temporal discretization} scheme. To ensure numerical stability and convergence, a \textbf{Picard iteration} method is employed for state variable updates. The governing mass conservation equation is defined as:
+
+\begin{equation}
+\frac{\partial}{\partial t}\left[\left(\phi-\frac{n_{\text{ad}}}{\rho^{\text{ad}}}\right) \rho^{\text{g}}+n_{\text{ad}}\right]+\nabla \cdot\left(\rho^{\text{g}} \mathbf{q}^{\text{g}}\right)+\nabla \cdot\left(\rho^{\text{ad}} \mathbf{v}^{\text{ad}}\right)=0
+\end{equation}
+
+To linearize the system, the accumulation and transport terms are treated independently. Let the total gas content (accumulation term) be denoted by $S(p)$:
+
+\begin{equation}
+S(p)=\left(\phi-\frac{n_{\text{ad}}}{\rho^{\text{ad}}}\right) \rho^{\text{g}}+n_{\text{ad}}
+\end{equation}
+
+By invoking the chain rule, the temporal derivative of the accumulation term is expressed as:
+
+\begin{equation}
+\frac{\partial S(p)}{\partial t}=\frac{d S(p)}{d p} \frac{\partial p}{\partial t}
+\end{equation}
+
+Expanding the derivative of $S(p)$ with respect to pressure $p$ yields:
+
+\begin{equation}
+\frac{d S(p)}{d p}=\left(\phi-\frac{n_{\text{ad}}}{\rho^{\text{ad}}}\right) \frac{d \rho^{\text{g}}}{d p} + \left(1-\frac{\rho^{\text{g}}}{\rho^{\text{ad}}}\right) \frac{d n_{\text{ad}}}{d p}
+\end{equation}
+
+The isothermal compressibility of the real gas phase, $c_{\text{g}}$, is defined as:
+
+\begin{equation}
+c_{\text{g}}=\frac{1}{\rho^{\text{g}}} \frac{d \rho^{\text{g}}}{d p}=\frac{1}{p}-\frac{1}{Z} \frac{d Z}{d p}
+\end{equation}
+
+Under the assumption of a constant compressibility factor ($\frac{dZ}{dp} \approx 0$) for small pressure fluctuations, Equation (5) simplifies to $c_{\text{g}} = 1/p$. The derivatives for gas density and adsorption capacity (following the Langmuir model) are given by:
+
+\begin{equation}
+\frac{d \rho^{\text{g}}}{d p} = \frac{M}{Z R T}, \quad \frac{d n_{\text{ad}}}{d p} = \frac{n_{\text{ad}}^{\max} K}{(1+Kp)^2}
+\end{equation}
+
+We define the \textbf{total storage capacity} $C_{\text{micro}}(p)$ as $dS(p)/dp$. Substituting the constitutive relations into the accumulation term results in:
+
+\begin{equation}
+C_{\text{micro}}(p) = \left(\phi - \frac{n_{\text{ad}}^{\max} K p}{\rho^{\text{ad}}(1+Kp)}\right) \frac{M}{ZRT} + \left(1 - \frac{Mp}{ZRT \rho^{\text{ad}}}\right) \frac{n_{\text{ad}}^{\max} K}{(1+Kp)^2}
+\end{equation}
+
+The transport mechanisms involve free gas convection and adsorbed phase surface diffusion, introducing significant nonlinearities:
+
+\begin{equation}
+\mathbf{q}^{\text{g}} = -f(\text{Kn}) \frac{k_{\text{m}}}{\mu} \nabla p, \quad \mathbf{v}^{\text{ad}} = -\frac{1}{\rho^{\text{ad}}} D_{\text{s}} \nabla n_{\text{ad}}
+\end{equation}
+
+The divergence of the flux terms can be consolidated by defining the \textbf{total transmissibility coefficient}, $T_{\text{micro}}(p)$:
+
+\begin{equation}
+T_{\text{micro}}(p) = \rho^{\text{g}} f(\text{Kn}) \frac{k_{\text{m}}}{\mu} + \frac{K n_{\text{ad}}^{\max} D_{\text{s}}}{(1+Kp)^2}
+\end{equation}
+
+Substituting $C_{\text{micro}}(p)$ and $T_{\text{micro}}(p)$ back into the mass balance, the governing equation is reformulated into a canonical diffusion-type form:
+
+\begin{equation}
+C_{\text{micro}}(p) \frac{\partial p}{\partial t} = \nabla \cdot (T_{\text{micro}}(p) \nabla p)
+\end{equation}
+
+To achieve a tractable linear solution, the pressure-dependent coefficients are \textbf{linearized by lagging} the arguments at the previous time-step pressure, $p^t$. Thus, the localized linear governing equation becomes:
+
+\begin{equation}
+C_{\text{micro}}(p^t) \frac{\partial p}{\partial t} = \nabla \cdot (T_{\text{micro}}(p^t) \nabla p)
+\end{equation}
+
+For gas transport in the macropores, where adsorption is negligible, the discrete mass balance for a control volume $V_i$ is given by:
+
+\begin{equation}
+V_i C_{i, \text{macro}}(p^t) \frac{p_i^{t+\Delta t} - p_i^t}{\Delta t} + \sum_{j=1}^{N_i} T_{ij, \text{macro}}(p^t)(p_i^{t+\Delta t} - p_j^{t+\Delta t}) = 0
+\end{equation}
+
+The inter-pore transmissibility $T_{ij}$ is determined via the \textbf{harmonic mean} of the adjacent node properties to ensure flux continuity at the interface.
+\begin{equation}
+T_{i j}\left(p^{t}\right)=\frac{a_{i} a_{j}}{a_{i}+a_{j}}
+\end{equation}
+
+where the interface terms $a_i$ and $a_j$ are given by:
+
+\begin{equation}
+a_{i}=\rho_{i}^{t} \operatorname{fun}_{i}(\mathrm{Kn}) \frac{\pi R_{i}^{4}}{8 \mu l_{i}} \quad \text{and} \quad a_{j}=\frac{A_{j} T_{j, micro}\left(p_{j}^{t}\right)}{d_{j}} \mathbf{n}_{j} \cdot \mathbf{f}_{j}
+\end{equation}
+
+aaa
+\end{document}
