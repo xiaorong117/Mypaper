@@ -7,144 +7,145 @@
 In this study, the transient gas flow equation for the microporous region is solved using **parameter explicit lagging** combined with **semi-implicit temporal discretization**. To ensure convergence and accuracy, a **Picard iteration** scheme is employed for updating variables when necessary. The governing equation is expressed as:
 
 \begin{equation}
-\frac{\partial}{\partial t}\left[\left(\varphi-\frac{n_{ad}}{\rho^{ad}}\right) \rho^{g}+n_{ad}\right]+\nabla \cdot\left(\rho^{g} \mathbf{q}^{g}\right)+\nabla \cdot\left(\rho^{ad} \mathbf{v}^{ad}\right)=0
+    \frac{\partial}{\partial t}\left[\left(\varphi-\frac{n_{ad}}{\rho^{ad}}\right) \rho^{g}+n_{ad}\right]+\nabla \cdot\left(\rho^{g} \mathbf{q}^{g}\right)+\nabla \cdot\left(\rho^{ad} \mathbf{v}^{ad}\right)=0
 \end{equation}
 
 To solve this, we treat the storage and transport terms separately. First, regarding the storage term, let:
 
 \begin{equation}
-S(p)=\left(\varphi -\frac{n_{ad}}{\rho^{ad}}\right) \rho^{g}+n_{ad}
+    S(p)=\left(\varphi -\frac{n_{ad}}{\rho^{ad}}\right) \rho^{g}+n_{ad}
 \end{equation}
 
 Applying the chain rule, the temporal derivative of the storage term is given by:
 
 \begin{equation}
-\frac{\partial S(p)}{\partial t}=\frac{d S(p)}{d p} \cdot \frac{\partial p}{\partial t}
+    \frac{\partial S(p)}{\partial t}=\frac{d S(p)}{d p} \cdot \frac{\partial p}{\partial t}
 \end{equation}
 
 The derivative of $S(p)$ with respect to pressure $p$ is expanded as:
 
 \begin{equation}
-\frac{d S(p)}{d p}=\left(\varphi-\frac{n_{ad}}{\rho^{ad}}\right) \frac{d \rho^{g}}{d p}+\rho^{g}\left(-\frac{1}{\rho^{ad}} \frac{d n_{ad}}{d p}\right)+\frac{d n_{ad}}{d p}
+    \frac{d S(p)}{d p}=\left(\varphi-\frac{n_{ad}}{\rho^{ad}}\right) \frac{d \rho^{g}}{d p}+\rho^{g}\left(-\frac{1}{\rho^{ad}} \frac{d n_{ad}}{d p}\right)+\frac{d n_{ad}}{d p}
 \end{equation}
 
 Rearranging Equation 4 yields:
 
 \begin{equation}
-\frac{d S(p)}{d p}=\left(\phi-\frac{n_{ad}}{\rho^{ad}}\right) \frac{d \rho^{g}}{d p}+\left(1-\frac{\rho^{g}}{\rho^{ad}}\right) \frac{d n_{ad}}{d p}
+    \frac{d S(p)}{d p}=\left(\phi-\frac{n_{ad}}{\rho^{ad}}\right) \frac{d \rho^{g}}{d p}+\left(1-\frac{\rho^{g}}{\rho^{ad}}\right) \frac{d n_{ad}}{d p}
 \end{equation}
 
 By introducing the isothermal compressibility coefficient for real gases, $c_g$:
 
 \begin{equation}
-c_{g}=\frac{1}{\rho^{g}} \frac{d \rho^{g}}{d p}=\frac{1}{p}-\frac{1}{Z} \frac{d Z}{d p}
+    c_{g}=\frac{1}{\rho^{g}} \frac{d \rho^{g}}{d p}=\frac{1}{p}-\frac{1}{Z} \frac{d Z}{d p}
 \end{equation}
 
 Since the pressure change is minimal, the compressibility factor can be assumed to be approximately constant, i.e., $\frac{dZ}{dp} = 0$. Consequently, Equation 6 simplifies to:
 
 \begin{equation}
-c_{g}=\frac{1}{p}
+    c_{g}=\frac{1}{p}
 \end{equation}
 
 The derivatives of gas density and adsorption capacity with respect to pressure are obtained as follows:
 
 \begin{equation}
-\frac{d \rho^{g}}{d p}=\rho^{g} c_{g}=\frac{M p}{Z R T} c_{g}=\frac{M}{Z R T}
+    \frac{d \rho^{g}}{d p}=\rho^{g} c_{g}=\frac{M p}{Z R T} c_{g}=\frac{M}{Z R T}
 \end{equation}
 
 \begin{equation}
-\frac{d n_{a d}}{d p}=\frac{n_{a d}^{\max } K}{(1+K p)^{2}}
+    \frac{d n_{a d}}{d p}=\frac{n_{a d}^{\max } K}{(1+K p)^{2}}
 \end{equation}
 
 We can then define a **total storage capacity** ($C$), where $C(p) = \frac{dS(p)}{dp}$. Substituting the previous expressions, we obtain:
 
 \begin{equation}
-C_{m i c r o}(p)=\left(\varphi-\frac{n_{a d}^{\max } K p}{\rho^{a d}(1+K p)}\right) \frac{M}{Z R T}+\left(1-\frac{M p}{Z R T \rho^{a d}}\right) \frac{n_{a d}^{\max } K}{(1+K p)^{2}}
+    C_{m i c r o}(p)=\left(\varphi-\frac{n_{a d}^{\max } K p}{\rho^{a d}(1+K p)}\right) \frac{M}{Z R T}+\left(1-\frac{M p}{Z R T \rho^{a d}}\right) \frac{n_{a d}^{\max } K}{(1+K p)^{2}}
 \end{equation}
 
 In the transport terms, nonlinearities are introduced by the compressibility of the free gas and the surface diffusion of the adsorbed gas:
 
 \begin{equation}
-\mathbf{q}^{g}=-\text{fun}(\text{Kn}) \frac{k_{m}}{\mu} \nabla p
+    \mathbf{q}^{g}=-\text{fun}(\text{Kn}) \frac{k_{m}}{\mu} \nabla p
 \end{equation}
 
 \begin{equation}
-\mathbf{v}^{a d}=-\frac{1}{\rho^{a d}} D_{s} \nabla n_{a d}
+    \mathbf{v}^{a d}=-\frac{1}{\rho^{a d}} D_{s} \nabla n_{a d}
 \end{equation}
 
 \begin{equation}
-\nabla \cdot\left(\rho^{g} \mathbf{q}^{g}\right)+\nabla \cdot\left(\rho^{a d} \mathbf{v}^{a d}\right)=\nabla \cdot\left(\rho^{g} \text{fun}(\text{Kn}) \frac{k_{m}}{\mu}+\frac{K n_{a d}^{\max } D_{s}}{(1+K p)^{2}}\right) \nabla p
+    \nabla \cdot\left(\rho^{g} \mathbf{q}^{g}\right)+\nabla \cdot\left(\rho^{a d} \mathbf{v}^{a d}\right)=\nabla \cdot\left(\rho^{g} \text{fun}(\text{Kn}) \frac{k_{m}}{\mu}+\frac{K n_{a d}^{\max } D_{s}}{(1+K p)^{2}}\right) \nabla p
 \end{equation}
+
 By defining the **total transmissibility coefficient** as:
 
 \begin{equation}
-T_{m i c r o}(p)=\left(\rho^{g} \text{fun}(\text{Kn}) \frac{k_{m}}{\mu}+\frac{K n_{a d}^{\max } D_{s}}{(1+K p)^{2}}\right)
+    T_{m i c r o}(p)=\left(\rho^{g} \text{fun}(\text{Kn}) \frac{k_{m}}{\mu}+\frac{K n_{a d}^{\max } D_{s}}{(1+K p)^{2}}\right)
 \end{equation}
 
 By substituting the total storage capacity and the total transmissibility coefficient into the original governing equation, the updated governing equation for gas flow in the micropores is obtained:
 
 \begin{equation}
-C_{m i c r o}(p) \cdot \frac{\partial p}{\partial t}=\nabla \cdot\left(T_{m i c r o}(p) \nabla p\right)
+    C_{m i c r o}(p) \cdot \frac{\partial p}{\partial t}=\nabla \cdot\left(T_{m i c r o}(p) \nabla p\right)
 \end{equation}
 
-Although the equation has been simplified in form, the coefficient $C(p)$ still contains highly nonlinear terms related to pressure $p$. To achieve a linearized solution, these coefficients must be "frozen" as constants at a specific reference pressure $\bar{p}$. In this study, we take the pressure from the previous time step, $p^t$, as the reference pressure. Consequently, the final governing equation for gas flow becomes a linear equation with respect to pressure:
+Although the equation has been simplified in form, the coefficient $C(p)$ still contains highly nonlinear terms related to pressure $p$. To achieve a linearized solution, these coefficients must be "frozen" as constants at a specific reference pressure $p^{b}$. In this study, we take the pressure from background pressure, $p^b$, as the reference pressure. Consequently, the final governing equation for gas flow becomes a linear equation with respect to pressure:
 
 \begin{equation}
-C_{m i c r o}(\bar{p}) \cdot \frac{\partial p}{\partial t}=\nabla \cdot\left(T_{m i c r o}(\bar{p}) \nabla p\right)
+    C_{m i c r o}(p^{b}) \cdot \frac{\partial p}{\partial t}=\nabla \cdot\left(T_{m i c r o}(p^{b}) \nabla p\right)
 \end{equation}
 
 For gas flow in the macropores, only the free gas phase is considered:
 
 \begin{equation}
-V_{i} \frac{\partial \rho_{i}^{g}}{\partial t}+\sum_{j=1}^{N_{i}} T_{i j}\left(p_{i}-p_{j}\right)=0
+    V_{i} \frac{\partial \rho_{i}^{g}}{\partial t}+\sum_{j=1}^{N_{i}} T_{i j}\left(p_{i}-p_{j}\right)=0
 \end{equation}
 
 Similarly, we define the storage capacity for the macropores as $C_{\text{macro}}(p)$:
 
 \begin{equation}
-C_{\text{macro}}(p)=\frac{M}{Z(p) R T}
+    C_{\text{macro}}(p)=\frac{M}{Z(p) R T}
 \end{equation}
 
-By defining the reference pressure $\bar{p}$ as the pressure from the previous time step, Equation 32 can be rewritten as:
+By defining the reference pressure $p^{b}$ as the pressure from the background pressure, Equation 17 can be rewritten as:
 
 \begin{equation}
-V_{i} C_{i, \text{macro}}(\bar{p}) \frac{\partial p_{i}}{\partial t}+\sum_{j=1}^{N_{i}} T_{i j}\left(p_{i}-p_{j}\right)=0
+    V_{i} C_{i, \text{macro}}(p^{b}) \frac{\partial p_{i}}{\partial t}+\sum_{j=1}^{N_{i}} T_{i j}\left(p_{i}-p_{j}\right)=0
 \end{equation}
 
 Equation 16 can then be discretized as follows:
 
 \begin{equation}
-V_{i} C_{i, \text{micro}}\left(p_{i}^{t}\right) \frac{p_{i}^{t+\Delta t}-p_{i}^{t}}{\Delta t}+\sum_{j=1}^{N_{i}} T_{i j, \text{micro}}\left(p^{t}\right)\left(p_{j}^{t+\Delta t}-p_{i}^{t+\Delta t}\right)=0
+    V_{i} C_{i, \text{micro}}\left(p^{b}\right) \frac{p_{i}^{t+\Delta t}-p_i^{t}}{\Delta t}+\sum_{j=1}^{N_{i}} T_{i j, \text{micro}}\left(p^{b}\right)\left(p_{j}^{t+\Delta t}-p_{i}^{t+\Delta t}\right)=0
 \end{equation}
 
-The transmissibility coefficient between micropores, $T_{i j,micro}\left(p^{t}\right)$, is given by:
+The transmissibility coefficient between micropores, $T_{i j,micro}\left(p^{b}\right)$, is given by:
 
 \begin{equation}
-T_{i j, \text{micro}}\left(p^{t}\right)=\frac{a_{i} a_{j}}{a_{i}+a_{j}}, \text{ with } a_{i}=\frac{A_{i} T_{i, \text{micro}}\left(p_{i}^{t}\right)}{d_{i}} \mathbf{n}_{i} \cdot \mathbf{f}_{i} \text{ and } a_{j}=\frac{A_{j} T_{j, \text{micro}}\left(p_{j}^{t}\right)}{d_{j}} \mathbf{n}_{j} \cdot \mathbf{f}_{j}
+    T_{i j, \text{micro}}\left(p^{b}\right)=\frac{a_{i} a_{j}}{a_{i}+a_{j}}, \text{ with } a_{i}=\frac{A_{i} T_{i, \text{micro}}\left(p^{b}\right)}{d_{i}} \mathbf{n}_{i} \cdot \mathbf{f}_{i} \text{ and } a_{j}=\frac{A_{j} T_{j, \text{micro}}\left(p^{b}\right)}{d_{j}} \mathbf{n}_{j} \cdot \mathbf{f}_{j}
 \end{equation}
 
 Equation 19 is discretized as:
 
 \begin{equation}
-V_{i} C_{i, \text{macro}}\left(p_{i}^{t}\right) \frac{p_{i}^{t+\Delta t}-p_{i}^{t}}{\Delta t}+\sum_{j=1}^{N_{i}} T_{i j, \text{macro}}\left(p^{t}\right)\left(p_{i}^{t+\Delta t}-p_{j}^{t+\Delta t}\right)=0
+    V_{i} C_{i, \text{macro}}\left(p^{b}\right) \frac{p_{i}^{t+\Delta t}-p_i^{t}}{\Delta t}+\sum_{j=1}^{N_{i}} T_{i j, \text{macro}}\left(p^{b}\right)\left(p_{i}^{t+\Delta t}-p_{j}^{t+\Delta t}\right)=0
 \end{equation}
 
-The gas transmissibility coefficient  between macropores $T_{i j, \text{macro}}\left(p^{t}\right)$ is defined as:
+The gas transmissibility coefficient  between macropores $T_{i j, \text{macro}}\left(p^{b}\right)$ is defined as:
 
 \begin{equation}
-T_{i j, \text{macro}}\left(p^{t}\right)=\frac{\operatorname{fun}_{i}(\mathrm{Kn})+\operatorname{fun}_{j}(\mathrm{Kn})}{2} \frac{\pi R_{i j}^{4}}{8 \mu l_{i j}} * \frac{\rho_{i}^{t}+\rho_{j}^{t}}{2}
+    T_{i j, \text{macro}}\left(p^{b}\right)=\frac{\operatorname{fun}_{i}(\mathrm{Kn})+\operatorname{fun}_{j}(\mathrm{Kn})}{2} \frac{\pi R_{i j}^{4}}{8 \mu l_{i j}} * \frac{\rho_{i}^{t}+\rho_{j}^{t}}{2}
 \end{equation}
 
 Finally, the gas transmissibility coefficient between the macropores and micropores is defined as:
 
 \begin{equation}
-T_{i j}\left(p^{t}\right)=\frac{a_{i} a_{j}}{a_{i}+a_{j}}
+    T_{i j}\left(p^{b}\right)=\frac{a_{i} a_{j}}{a_{i}+a_{j}}
 \end{equation}
 
 where the interface terms $a_i$ and $a_j$ are given by:
 
 \begin{equation}
-a_{i}=\rho_{i}^{t} \operatorname{fun}_{i}(\mathrm{Kn}) \frac{\pi R_{i}^{4}}{8 \mu l_{i}} \quad \text{and} \quad a_{j}=\frac{A_{j} T_{j, micro}\left(p_{j}^{t}\right)}{d_{j}} \mathbf{n}_{j} \cdot \mathbf{f}_{j}
+    a_{i}=\rho_{i}^{t} \operatorname{fun}_{i}(\mathrm{Kn}) \frac{\pi R_{i}^{4}}{8 \mu l_{i}} \quad \text{and} \quad a_{j}=\frac{A_{j} T_{j, micro}\left(p^{b}\right)}{d_{j}} \mathbf{n}_{j} \cdot \mathbf{f}_{j}
 \end{equation}
 
 \end{document}

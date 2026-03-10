@@ -41,3 +41,5 @@
 *.brf
 *.spl
 *.xdv
+main.fdb_latexmk
+main.fls
