@@ -106,7 +106,7 @@ Similarly, we define the storage capacity for the macropores as $C_{\text{macro}
     C_{\text{macro}}(p)=\frac{M}{Z(p) R T}
 \end{equation}
 
-By defining the reference pressure $p^{b}$ as the pressure from the background pressure, Equation 17 can be rewritten as:
+By defining the reference pressure $p^{b}$ as the pressure from the background pressure or from last time step, Equation 17 can be rewritten as:
 
 \begin{equation}
     V_{i} C_{i, \text{macro}}(p^{b}) \frac{\partial p_{i}}{\partial t}+\sum_{j=1}^{N_{i}} T_{i j}\left(p_{i}-p_{j}\right)=0
@@ -147,5 +147,7 @@ where the interface terms $a_i$ and $a_j$ are given by:
 \begin{equation}
     a_{i}=\rho_{i}^{t} \operatorname{fun}_{i}(\mathrm{Kn}) \frac{\pi R_{i}^{4}}{8 \mu l_{i}} \quad \text{and} \quad a_{j}=\frac{A_{j} T_{j, micro}\left(p^{b}\right)}{d_{j}} \mathbf{n}_{j} \cdot \mathbf{f}_{j}
 \end{equation}
+
+It was found that when the background pressure is used as the reference (frozen) pressure, even a pressure drop as small as 100 Pa can lead to cumulative errors that eventually cause numerical failure in the later stages of the simulation. Therefore, using the pressure from the previous time step as the reference (frozen) pressure yields very stable numerical results.
 
 \end{document}
